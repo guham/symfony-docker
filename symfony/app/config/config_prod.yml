@@ -1,0 +1,33 @@
+imports:
+    - { resource: config.yml }
+
+doctrine:
+    orm:
+        metadata_cache_driver: redis
+        query_cache_driver: redis
+        result_cache_driver: redis
+
+# MongoDB Configuration
+#doctrine_mongodb:
+#    document_managers:
+#        default:
+#            metadata_cache_driver:
+#                type: redis
+#                class: Doctrine\Common\Cache\RedisCache
+#                host: redis
+#                port: 6379
+#                instance_class: Redis
+
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: nested
+        nested:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+        console:
+            type: console
+            process_psr_3_messages: false

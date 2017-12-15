@@ -1,0 +1,13 @@
+# MongoDB Configuration
+doctrine_mongodb:
+    connections:
+        default:
+            server: '%env(MONGODB_SERVER)%'
+            options:
+              username: '%env(MONGODB_USERNAME)%'
+              password: '%env(MONGODB_PASSWORD)%'
+              authSource: '%env(MONGODB_DATABASE)%'
+    default_database: '%env(MONGODB_DATABASE)%'
+    document_managers:
+        default:
+            auto_mapping: true

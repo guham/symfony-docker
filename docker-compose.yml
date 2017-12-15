@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ./docker/app
+    volumes:
+      - ./symfony:/srv:rw
+      - app_logs:/srv/var/logs
+    env_file:
+      - .env
+    environment:
+      XDEBUG_CONFIG: remote_host=${XDEBUG_REMOTE_HOST}
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      args:
+        - nginx_host=${NGINX_HOST}
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    volumes:
+      - ./symfony/web:/srv/web:ro
+      - ./docker/nginx/default.template:/etc/nginx/conf.d/default.template
+      - nginx_logs:/var/log/nginx
+    env_file:
+      - .env
+    command: /bin/bash -c "envsubst '$$NGINX_HOST'
+        < /etc/nginx/conf.d/default.template
+        > /etc/nginx/conf.d/default.conf
+        && exec nginx -g 'daemon off;'"
+
+  redis:
+    build:
+      context: ./docker/redis
+
+  elk:
+    image: willdurand/elk
+    ports:
+      - "81:80"
+    volumes:
+      - ./docker/elk/logstash:/etc/logstash
+      - ./docker/elk/logstash/patterns:/opt/logstash/patterns
+      - app_logs:/var/log/app
+      - nginx_logs:/var/log/nginx
+
+volumes:
+  app_logs:
+  nginx_logs:
