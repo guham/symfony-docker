@@ -40,6 +40,12 @@
     **Note:** for PostgreSQL, use `docker-compose.postgresql.yml` and for MongoDB `docker-compose.mongodb.yml`
 
 6. Composer install
+
+    first, configure permissions on `var/logs` folder
+    ```bash
+    $ docker-compose exec app chown -R www-data:1000 var/logs
+    ```
+    then
     ```bash
     $ docker-compose exec -u www-data app composer install
     ```
@@ -53,6 +59,10 @@ You can access the application both in HTTP and HTTPS:
 - Kibana logs: [symfony-docker.dev:81](http://symfony-docker.dev:81)
 
 **Note:** `symfony-docker.dev` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
+
+## Docker-compose alternative method
+
+WIP
 
 ## TODO
 - [ ] Add Symfony 4 support
