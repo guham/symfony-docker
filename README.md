@@ -54,15 +54,67 @@
 
 You can access the application both in HTTP and HTTPS:
 
-- env dev: [symfony-docker.dev/app_dev.php](http://symfony-docker.dev/app_dev.php)
-- env prod: [symfony-docker.dev](http://symfony-docker.dev)
-- Kibana logs: [symfony-docker.dev:81](http://symfony-docker.dev:81)
+- env dev: [symfony-docker.localhost/app_dev.php](http://symfony-docker.localhost/app_dev.php)
+- env prod: [symfony-docker.localhost](http://symfony-docker.localhost)
+- Kibana logs: [symfony-docker.localhost:81](http://symfony-docker.localhost:81)
 
-**Note:** `symfony-docker.dev` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
+**Note:** `symfony-docker.localhost` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
 
 ## Docker-compose alternative method
 
-WIP
+In order to get rid of the second compose file (e.g.`docker-compose.mysql.yml`), you can "merge" both compose files in another one:
+
+```bash
+$ docker-compose -f docker-compose.yml -f docker-compose.mysql.yml config > docker-stack.yml 
+```
+then
+```bash
+$ docker-compose -f docker-stack.yml build
+$ docker-compose -f docker-stack.yml up -d
+```
+
+Moreover, you can copy database service configuration from compose file into `docker-compose.yml` and use it as default.
+
+## Databases
+
+- MySQL
+
+The `MYSQL_DATABASE` variable specifies the name of the database to be created on image startup.
+User `MYSQL_USER` with password `MYSQL_PASSWORD` will be created and will be granted superuser access to this database.
+
+- PostgreSQL
+
+Same as MySQL but with `POSTGRES_DB`, `POSTGRES_USER` and `POSTGRES_PASSWORD` variables.
+
+- MongoDB
+
+The `MONGO_INITDB_DATABASE` variable specifies the name of the database to be created on image startup.
+User `MONGODB_USERNAME` with password `MONGODB_PASSWORD` will be created with the `dbOwner` role to this database.
+Finally, `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` let you customize root user.
+
+## Commands
+
+**Note:** `symfony` is the default value for the user, password and database name. You can customize them in the `.env` file.
+
+```bash
+# bash
+$ docker-compose exec app /bin/bash
+
+# Symfony console
+$ docker-compose exec -u www-data app bin/console
+
+# MySQL
+# access with application account
+$ docker-compose -f docker-stack.yml exec mysql mysql -usymfony -psymfony
+
+# PostgreSQL
+# access with application account
+$ docker-compose -f docker-stack.yml exec postgresql psql -d symfony -U symfony
+
+# MongoDB
+# access with application account
+$ docker-compose -f docker-stack.yml exec mongodb mongo -u symfony -p symfony --authenticationDatabase symfony
+```
 
 ## TODO
 - [ ] Add Symfony 4 support
