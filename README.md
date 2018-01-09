@@ -1,4 +1,4 @@
-# Symfony 3.4 Docker
+# Symfony 3.4 + Docker
 
 ##  Requirements
 
