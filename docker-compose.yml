@@ -6,7 +6,7 @@ services:
       context: ./docker/app
     volumes:
       - ./symfony:/srv:rw
-      - app_logs:/srv/var/logs
+      - app_logs:/srv/var/log
     env_file:
       - .env
     environment:
@@ -23,7 +23,7 @@ services:
     depends_on:
       - app
     volumes:
-      - ./symfony/web:/srv/web:ro
+      - ./symfony/public:/srv/public:ro
       - ./docker/nginx/default.template:/etc/nginx/conf.d/default.template
       - nginx_logs:/var/log/nginx
     env_file:

@@ -1,4 +1,4 @@
-# Symfony 3.4 Docker
+# Symfony 4.0 + Docker
 
 ##  Requirements
 
@@ -7,7 +7,7 @@
 
 ## Services
 
-- PHP7-FPM 7.1
+- PHP-FPM 7.1
 - Nginx 1.13
 - MySQL 5.7 | PostgreSQL 10.1 | MongoDB 3.4
 - Redis 4.0
@@ -21,12 +21,56 @@
 
 3. Add the server name in your system host file
 
-4. Update the Symfony configuration file according to your choice of database
+4. Update the database configuration according to your choice of database
+
+    MySQL:
     ```yaml
-    # symfony/app/config/config.yml
-    imports:
+    # symfony/config/packages/doctrine.yaml
+    doctrine:
+        dbal:
+            driver: 'pdo_mysql'
+            server_version: '5.7'
+            charset: utf8mb4
+            url: '%env(resolve:DATABASE_URL)%'
+            # ...
+    ```
+    ```bash
+    # symfony/.env
+    DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+    ```
+    PostgreSQL:
+    ```yaml
+    # symfony/config/packages/doctrine.yaml
+    doctrine:
+        dbal:
+            driver: 'pdo_pgsql'
+            server_version: '10.1'
+            charset: UTF8
+            url: '%env(resolve:DATABASE_URL)%'
+            # ...
+    ```
+    ```bash
+    # symfony/.env
+    DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
+    ```
+    MongoDB:
+    ```yaml
+    # symfony/config/packages/doctrine_mongodb.yaml
+    doctrine_mongodb:
+        connections:
+            default:
+                server: '%env(MONGODB_URL)%'
+                options:
+                    username: '%env(MONGODB_USERNAME)%'
+                    password: '%env(MONGODB_PASSWORD)%'
+                    authSource: '%env(MONGO_INITDB_DATABASE)%'
+        default_database: '%env(MONGODB_DB)%'
         # ...
-        - { resource: db-mysql.yml } # in case of MySQL; you can set db-postgresql.yml or db-mongodb.yml
+    ```
+    ```bash
+    # symfony/.env
+    MONGODB_URL=${MONGODB_SERVER}
+    MONGODB_DB=${MONGO_INITDB_DATABASE}
     ```
 
 5. Build & run containers with `docker-compose` by specifying a second compose file, e.g., with MySQL 
@@ -40,12 +84,6 @@
     **Note:** for PostgreSQL, use `docker-compose.postgresql.yml` and for MongoDB `docker-compose.mongodb.yml`
 
 6. Composer install
-
-    first, configure permissions on `var/logs` folder
-    ```bash
-    $ docker-compose exec app chown -R www-data:1000 var/logs
-    ```
-    then
     ```bash
     $ docker-compose exec -u www-data app composer install
     ```
@@ -54,8 +92,7 @@
 
 You can access the application both in HTTP and HTTPS:
 
-- env dev: [symfony-docker.localhost/app_dev.php](http://symfony-docker.localhost/app_dev.php)
-- env prod: [symfony-docker.localhost](http://symfony-docker.localhost)
+- with `APP_ENV=dev` or `APP_ENV=prod`: [symfony-docker.localhost](http://symfony-docker.localhost)
 - Kibana logs: [symfony-docker.localhost:81](http://symfony-docker.localhost:81)
 
 **Note:** `symfony-docker.localhost` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
@@ -103,6 +140,9 @@ $ docker-compose exec app /bin/bash
 # Symfony console
 $ docker-compose exec -u www-data app bin/console
 
+# configure permissions, e.g. on `var/log` folder
+$ docker-compose exec app chown -R www-data:1000 var/log
+
 # MySQL
 # access with application account
 $ docker-compose -f docker-stack.yml exec mysql mysql -usymfony -psymfony
@@ -117,6 +157,5 @@ $ docker-compose -f docker-stack.yml exec mongodb mongo -u symfony -p symfony --
 ```
 
 ## TODO
-- [ ] Add Symfony 4 support
 - [ ] Use PHP 7.2
 - [ ] Update elk service

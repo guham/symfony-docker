@@ -36,7 +36,7 @@ COPY xdebug.ini /tmp/xdebug.ini
 RUN cat /tmp/xdebug.ini >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN rm /tmp/xdebug.ini
 
-COPY --from=composer:1.5 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:1.6 /usr/bin/composer /usr/bin/composer
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER 1
 # create composer cache directory
