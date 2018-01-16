@@ -1,5 +1,7 @@
 FROM php:7.1-fpm
 
+ARG timezone
+
 RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
         git \
         unzip \
@@ -31,6 +33,7 @@ RUN docker-php-ext-configure \
         redis
 
 COPY php.ini /usr/local/etc/php/php.ini
+RUN sed -i -e "s#TIMEZONE#$timezone#g" /usr/local/etc/php/php.ini
 
 COPY xdebug.ini /tmp/xdebug.ini
 RUN cat /tmp/xdebug.ini >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

@@ -18,3 +18,5 @@ RUN openssl x509 -req -sha256 -days 365 -in /etc/ssl/server.csr -signkey /etc/ss
     -out /etc/ssl/server.crt -extensions v3_req -extfile /etc/ssl/openssl.cnf
 
 ADD nginx.conf /etc/nginx/
+
+RUN rm /var/log/nginx/access.log /var/log/nginx/error.log

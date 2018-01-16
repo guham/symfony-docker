@@ -11,7 +11,7 @@
 - Nginx 1.13
 - MySQL 5.7 | PostgreSQL 10.1 | MongoDB 3.4
 - Redis 4.0
-- ELK (Elasticsearch 1.x, Logstash 1.x and Kibana 4.1.2)
+- [ELK](https://github.com/spujadas/elk-docker) (Elasticsearch 6.1.1, Logstash 6.1.1, Kibana 6.1.1)
 
 ## Installation
 
@@ -93,13 +93,13 @@
 You can access the application both in HTTP and HTTPS:
 
 - with `APP_ENV=dev` or `APP_ENV=prod`: [symfony-docker.localhost](http://symfony-docker.localhost)
-- Kibana logs: [symfony-docker.localhost:81](http://symfony-docker.localhost:81)
+- Kibana logs: [symfony-docker.localhost:5601](http://symfony-docker.localhost:5601)
 
 **Note:** `symfony-docker.localhost` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
 
 ## Docker-compose alternative method
 
-In order to get rid of the second compose file (e.g.`docker-compose.mysql.yml`), you can "merge" both compose files in another one:
+In order to get rid of the second compose file (e.g.`docker-compose.mysql.yml`), [you can validate the configuration](https://docs.docker.com/compose/reference/config/) and then use another Compose file:
 
 ```bash
 $ docker-compose -f docker-compose.yml -f docker-compose.mysql.yml config > docker-stack.yml 
@@ -158,4 +158,3 @@ $ docker-compose -f docker-stack.yml exec mongodb mongo -u symfony -p symfony --
 
 ## TODO
 - [ ] Use PHP 7.2
-- [ ] Update elk service

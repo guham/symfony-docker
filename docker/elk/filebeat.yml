@@ -1,0 +1,12 @@
+output.logstash:
+  hosts: ["elk:5044"]
+
+filebeat.prospectors:
+- type: log
+  paths:
+    - /var/log/nginx/*.log
+  tags: ["nginx-access"]
+- type: log
+  paths:
+    - /var/log/app/*.log
+  tags: ["app"]
