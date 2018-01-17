@@ -15,13 +15,19 @@
 
 ## Installation
 
-1. Clone this repo
-
-2. Update the `.env` file according to your needs. The `NGINX_HOST` environment variable allows you to use a custom server name
+1. Clone this repository
+    ```bash
+    $ git clone https://github.com/guham/symfony-docker.git
+    ```
+2. Update the Docker `.env` file according to your needs. The `NGINX_HOST` environment variable allows you to use a custom server name
 
 3. Add the server name in your system host file
 
-4. Update the database configuration according to your choice of database
+4. Copy the `symfony/.env.dist` file to `symfony/.env`
+    ```bash
+    $ cp symfony/.env.dist symfony/.env
+    ```
+5. Update the database configuration according to your choice of database
 
     MySQL:
     ```yaml
@@ -73,7 +79,7 @@
     MONGODB_DB=${MONGO_INITDB_DATABASE}
     ```
 
-5. Build & run containers with `docker-compose` by specifying a second compose file, e.g., with MySQL 
+6. Build & run containers with `docker-compose` by specifying a second compose file, e.g., with MySQL 
     ```bash
     $ docker-compose -f docker-compose.yml -f docker-compose.mysql.yml build
     ```
@@ -83,7 +89,13 @@
     ```
     **Note:** for PostgreSQL, use `docker-compose.postgresql.yml` and for MongoDB `docker-compose.mongodb.yml`
 
-6. Composer install
+7. Composer install
+
+    first, configure permissions on `symfony/var` folder
+    ```bash
+    $ docker-compose exec app chown -R www-data:1000 var
+    ```
+    then
     ```bash
     $ docker-compose exec -u www-data app composer install
     ```
