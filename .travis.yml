@@ -14,6 +14,9 @@ before_install:
   - docker -v
   - docker-compose -v
 
+before_script:
+  - sudo /etc/init.d/mysql stop
+
 script:
   - docker-compose -f docker-compose.yml -f docker-compose.mysql.yml config > docker-stack.yml
   - docker-compose -f docker-stack.yml build
