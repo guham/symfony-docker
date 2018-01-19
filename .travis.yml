@@ -23,3 +23,13 @@ script:
   - docker-compose -f docker-stack.yml up -d
   - docker-compose -f docker-stack.yml ps
   - docker-compose -f docker-stack.yml stop
+  - docker-compose -f docker-compose.yml -f docker-compose.postgresql.yml config > docker-stack.yml
+  - docker-compose -f docker-stack.yml build
+  - docker-compose -f docker-stack.yml up -d
+  - docker-compose -f docker-stack.yml ps
+  - docker-compose -f docker-stack.yml stop
+  - docker-compose -f docker-compose.yml -f docker-compose.mongodb.yml config > docker-stack.yml
+  - docker-compose -f docker-stack.yml build
+  - docker-compose -f docker-stack.yml up -d
+  - docker-compose -f docker-stack.yml ps
+  - docker-compose -f docker-stack.yml stop
