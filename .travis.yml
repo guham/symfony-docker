@@ -16,6 +16,7 @@ before_install:
 
 before_script:
   - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
 
 script:
   - docker-compose -f docker-compose.yml -f docker-compose.mysql.yml config > docker-stack.yml

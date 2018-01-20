@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install --no-install-recommends --no-install-sugge
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure \
+RUN set -xe \
+    && docker-php-ext-configure \
         intl \
     && docker-php-ext-install \
         intl \
