@@ -9,11 +9,11 @@
 
 ## Services
 
-- PHP-FPM 7.1
+- PHP-FPM 7.2
 - Nginx 1.13
 - MySQL 5.7 | PostgreSQL 10.1 | MongoDB 3.4
 - Redis 4.0
-- [ELK](https://github.com/spujadas/elk-docker) (Elasticsearch 6.1.1, Logstash 6.1.1, Kibana 6.1.1)
+- [ELK](https://github.com/spujadas/elk-docker) (Elasticsearch 6.1.2, Logstash 6.1.2, Kibana 6.1.2)
 
 ## Installation
 
@@ -169,6 +169,3 @@ $ docker-compose -f docker-stack.yml exec postgresql psql -d symfony -U symfony
 # access with application account
 $ docker-compose -f docker-stack.yml exec mongodb mongo -u symfony -p symfony --authenticationDatabase symfony
 ```
-
-## TODO
-- [ ] Use PHP 7.2

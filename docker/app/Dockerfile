@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.2-fpm
 
 ARG timezone
 
@@ -24,7 +24,7 @@ RUN set -xe \
         pdo_pgsql \
     && pecl install \
         apcu \
-        xdebug \
+        xdebug-2.6.0beta1 \
         mongodb \
         redis \
     && docker-php-ext-enable \
