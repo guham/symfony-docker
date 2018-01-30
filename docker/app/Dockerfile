@@ -24,7 +24,7 @@ RUN set -xe \
         pdo_pgsql \
     && pecl install \
         apcu \
-        xdebug-2.6.0beta1 \
+        xdebug \
         mongodb \
         redis \
     && docker-php-ext-enable \
