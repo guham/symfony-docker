@@ -11,7 +11,7 @@
 
 - PHP-FPM 7.2
 - Nginx 1.13
-- MySQL 5.7 | PostgreSQL 10.1 | MongoDB 3.4
+- MySQL 5.7 | PostgreSQL 9.6 | MongoDB 3.4
 - Redis 4.0
 - [ELK](https://github.com/spujadas/elk-docker) (Elasticsearch 6.1.2, Logstash 6.1.2, Kibana 6.1.2)
 
@@ -52,7 +52,7 @@
     doctrine:
         dbal:
             driver: 'pdo_pgsql'
-            server_version: '10.1'
+            server_version: '9.6'
             charset: UTF8
             url: '%env(resolve:DATABASE_URL)%'
             # ...
