@@ -1,4 +1,4 @@
 .idea
 .data/*
 !.data/.gitkeep
-docker-stack.yml
+docker-stack.yaml

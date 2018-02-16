@@ -19,18 +19,18 @@ before_script:
   - sudo /etc/init.d/postgresql stop
 
 script:
-  - docker-compose -f docker-compose.yml -f docker-compose.mysql.yml config > docker-stack.yml
-  - docker-compose -f docker-stack.yml build
-  - docker-compose -f docker-stack.yml up -d
-  - docker-compose -f docker-stack.yml ps
-  - docker-compose -f docker-stack.yml stop
-  - docker-compose -f docker-compose.yml -f docker-compose.postgresql.yml config > docker-stack.yml
-  - docker-compose -f docker-stack.yml build
-  - docker-compose -f docker-stack.yml up -d
-  - docker-compose -f docker-stack.yml ps
-  - docker-compose -f docker-stack.yml stop
-  - docker-compose -f docker-compose.yml -f docker-compose.mongodb.yml config > docker-stack.yml
-  - docker-compose -f docker-stack.yml build
-  - docker-compose -f docker-stack.yml up -d
-  - docker-compose -f docker-stack.yml ps
-  - docker-compose -f docker-stack.yml stop
+  - docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml config > docker-stack.yaml
+  - docker-compose -f docker-stack.yaml build
+  - docker-compose -f docker-stack.yaml up -d
+  - docker-compose -f docker-stack.yaml ps
+  - docker-compose -f docker-stack.yaml stop
+  - docker-compose -f docker-compose.yaml -f docker-compose.postgresql.yaml config > docker-stack.yaml
+  - docker-compose -f docker-stack.yaml build
+  - docker-compose -f docker-stack.yaml up -d
+  - docker-compose -f docker-stack.yaml ps
+  - docker-compose -f docker-stack.yaml stop
+  - docker-compose -f docker-compose.yaml -f docker-compose.mongodb.yaml config > docker-stack.yaml
+  - docker-compose -f docker-stack.yaml build
+  - docker-compose -f docker-stack.yaml up -d
+  - docker-compose -f docker-stack.yaml ps
+  - docker-compose -f docker-stack.yaml stop

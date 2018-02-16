@@ -83,13 +83,13 @@
 
 6. Build & run containers with `docker-compose` by specifying a second compose file, e.g., with MySQL 
     ```bash
-    $ docker-compose -f docker-compose.yml -f docker-compose.mysql.yml build
+    $ docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml build
     ```
     then
     ```bash
-    $ docker-compose -f docker-compose.yml -f docker-compose.mysql.yml up -d
+    $ docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml up -d
     ```
-    **Note:** for PostgreSQL, use `docker-compose.postgresql.yml` and for MongoDB `docker-compose.mongodb.yml`
+    **Note:** for PostgreSQL, use `docker-compose.postgresql.yaml` and for MongoDB `docker-compose.mongodb.yaml`
 
 7. Composer install
 
@@ -113,18 +113,18 @@ You can access the application both in HTTP and HTTPS:
 
 ## Docker-compose alternative method
 
-In order to get rid of the second compose file (e.g.`docker-compose.mysql.yml`), [you can validate the configuration](https://docs.docker.com/compose/reference/config/) and then use another Compose file:
+In order to get rid of the second compose file (e.g.`docker-compose.mysql.yaml`), [you can validate the configuration](https://docs.docker.com/compose/reference/config/) and then use another Compose file:
 
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose.mysql.yml config > docker-stack.yml 
+$ docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml config > docker-stack.yaml 
 ```
 then
 ```bash
-$ docker-compose -f docker-stack.yml build
-$ docker-compose -f docker-stack.yml up -d
+$ docker-compose -f docker-stack.yaml build
+$ docker-compose -f docker-stack.yaml up -d
 ```
 
-Moreover, you can copy database service configuration from compose file into `docker-compose.yml` and use it as default.
+Moreover, you can copy database service configuration from compose file into `docker-compose.yaml` and use it as default.
 
 ## Databases
 
@@ -159,13 +159,13 @@ $ docker-compose exec app chown -R www-data:1000 var/log
 
 # MySQL
 # access with application account
-$ docker-compose -f docker-stack.yml exec mysql mysql -usymfony -psymfony
+$ docker-compose -f docker-stack.yaml exec mysql mysql -usymfony -psymfony
 
 # PostgreSQL
 # access with application account
-$ docker-compose -f docker-stack.yml exec postgresql psql -d symfony -U symfony
+$ docker-compose -f docker-stack.yaml exec postgresql psql -d symfony -U symfony
 
 # MongoDB
 # access with application account
-$ docker-compose -f docker-stack.yml exec mongodb mongo -u symfony -p symfony --authenticationDatabase symfony
+$ docker-compose -f docker-stack.yaml exec mongodb mongo -u symfony -p symfony --authenticationDatabase symfony
 ```

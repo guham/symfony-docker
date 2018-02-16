@@ -3,7 +3,7 @@ FROM php:7.2-fpm
 ARG timezone
 
 RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
-        git \
+		git \
         unzip \
         libicu-dev \
         zlib1g-dev \

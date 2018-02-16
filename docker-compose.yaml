@@ -7,7 +7,7 @@ services:
       args:
         - timezone=${TZ}
     volumes:
-      - ./symfony:/srv:rw
+      - ./symfony:/srv:rw,cached
       - app_log:/srv/var/log
     env_file:
       - .env
