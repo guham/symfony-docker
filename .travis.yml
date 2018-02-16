@@ -3,20 +3,16 @@ sudo: required
 services:
   - docker
 
-env:
-  - DOCKER_COMPOSE_VERSION=1.17.1
+addons:
+  apt:
+    packages:
+      - docker-ce
 
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker -v
-  - docker-compose -v
-
-before_script:
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
+  - docker -v
+  - docker-compose -v
 
 script:
   - docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml config > docker-stack.yaml
