@@ -83,6 +83,9 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "nikic/php-parser": {
+        "version": "v4.0.1"
+    },
     "ocramius/package-versions": {
         "version": "1.2.0"
     },
@@ -103,9 +106,6 @@
     },
     "psr/simple-cache": {
         "version": "1.0.0"
-    },
-    "roave/security-advisories": {
-        "version": "dev-master"
     },
     "sensio/framework-extra-bundle": {
         "version": "4.0",
