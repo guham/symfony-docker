@@ -1,17 +1,20 @@
-version: '3'
+version: '3.2'
 
 services:
-    app:
-        depends_on:
-            - mysql
+  app:
+    depends_on:
+      - mysql
 
-    mysql:
-        build:
-            context: ./docker/db
-            dockerfile: Dockerfile.mysql
-        volumes:
-            - ./.data/mysql:/var/lib/mysql:rw
-        env_file:
-            - .env
-        ports:
-            - "3306:3306"
+  mysql:
+    build:
+      context: ./docker/db
+      dockerfile: Dockerfile.mysql
+    volumes:
+      - ./.data/mysql:/var/lib/mysql:rw
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    ports:
+      - "3306:3306"

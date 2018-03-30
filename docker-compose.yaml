@@ -1,66 +1,59 @@
-version: '3'
+version: '3.2'
 
 services:
-        app:
-            build:
-                context: ./docker/app
-                args:
-                    - timezone=${TZ}
-            volumes:
-                - ./symfony:/srv:rw,cached
-                - app_log:/srv/var/log
-            env_file:
-                - .env
-            environment:
-                XDEBUG_CONFIG: remote_host=${XDEBUG_REMOTE_HOST}
-                PHP_IDE_CONFIG: serverName=${NGINX_HOST}
+  app:
+    build:
+      context: ./docker/app
+      args:
+        - timezone=${TZ}
+    volumes:
+      - ./:/srv:rw,cached
+      - app_log:/srv/var/log
 
-        nginx:
-            build:
-                context: ./docker/nginx
-                args:
-                    - nginx_host=${NGINX_HOST}
-            ports:
-                - "80:80"
-                - "443:443"
-            depends_on:
-                - app
-            volumes:
-                - ./symfony/public:/srv/public:ro
-                - ./docker/nginx/default.template:/etc/nginx/conf.d/default.template
-                - nginx_log:/var/log/nginx
-            env_file:
-                - .env
-            command: /bin/bash -c "envsubst '$$NGINX_HOST'
-                < /etc/nginx/conf.d/default.template
-                > /etc/nginx/conf.d/default.conf
-                && exec nginx -g 'daemon off;'"
+  nginx:
+    build:
+      context: ./docker/nginx
+      args:
+        - nginx_host=${NGINX_HOST}
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    volumes:
+      - ./public:/srv/public:ro
+      - ./docker/nginx/default.template:/etc/nginx/conf.d/default.template
+      - nginx_log:/var/log/nginx
+    environment:
+      - NGINX_HOST
+    command: /bin/bash -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf
+      && exec nginx -g 'daemon off;'"
 
-        redis:
-            build:
-                context: ./docker/redis
+  redis:
+    build:
+      context: ./docker/redis
 
-        elk:
-            build:
-                context: ./docker/elk
-            ports:
-                - "5601:5601"
-                - "9200:9200"
-                - "5044:5044"
-            environment:
-                - ELASTICSEARCH_START
-                - LOGSTASH_START
-                - KIBANA_START
-                - TZ
+  elk:
+    build:
+      context: ./docker/elk
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+    environment:
+      - ELASTICSEARCH_START
+      - LOGSTASH_START
+      - KIBANA_START
+      - TZ
 
-        filebeat:
-            build:
-                context: ./docker/elk
-                dockerfile: Dockerfile.filebeat
-            volumes:
-                - app_log:/var/log/app
-                - nginx_log:/var/log/nginx
+  filebeat:
+    build:
+      context: ./docker/elk
+      dockerfile: Dockerfile.filebeat
+    volumes:
+      - app_log:/var/log/app
+      - nginx_log:/var/log/nginx
 
 volumes:
-    app_log:
-    nginx_log:
+  app_log:
+  nginx_log:

@@ -1,14 +1,14 @@
+FROM composer:1.6
 FROM php:7.2-fpm
 
 ARG timezone
 
 RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
-		git \
+        git \
         unzip \
         libicu-dev \
         zlib1g-dev \
         libssl-dev \
-        pkg-config \
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -40,7 +40,7 @@ COPY xdebug.ini /tmp/xdebug.ini
 RUN cat /tmp/xdebug.ini >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN rm /tmp/xdebug.ini
 
-COPY --from=composer:1.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER 1
 # create composer cache directory

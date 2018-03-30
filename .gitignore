@@ -2,3 +2,10 @@
 .data/*
 !.data/.gitkeep
 docker-stack.yaml
+
+###> symfony/framework-bundle ###
+.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
