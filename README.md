@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/guham/symfony-docker.svg?branch=master)](https://travis-ci.org/guham/symfony-docker)
 
-##  Requirements
+## Requirements
 
 - [Docker](https://docs.docker.com/engine/installation/) installed
 - [Docker Compose](https://docs.docker.com/compose/install/) installed
@@ -19,7 +19,7 @@
 
 1. Clone this repository
     ```bash
-    $ git clone https://github.com/guham/symfony-docker.git
+    git clone https://github.com/guham/symfony-docker.git
     ```
 2. Update the Docker `.env` file according to your needs. The `NGINX_HOST` environment variable allows you to use a custom server name
 
@@ -27,7 +27,7 @@
 
 4. Copy the `symfony/.env.dist` file to `symfony/.env`
     ```bash
-    $ cp symfony/.env.dist symfony/.env
+    cp symfony/.env.dist symfony/.env
     ```
 5. Update the database configuration according to your choice of database
 
@@ -81,13 +81,13 @@
     MONGODB_DB=${MONGO_INITDB_DATABASE}
     ```
 
-6. Build & run containers with `docker-compose` by specifying a second compose file, e.g., with MySQL 
+6. Build & run containers with `docker-compose` by specifying a second compose file, e.g., with MySQL
     ```bash
-    $ docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml build
+    docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml build
     ```
     then
     ```bash
-    $ docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml up -d
+    docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml up -d
     ```
     **Note:** for PostgreSQL, use `docker-compose.postgresql.yaml` and for MongoDB `docker-compose.mongodb.yaml`
 
@@ -95,11 +95,11 @@
 
     first, configure permissions on `symfony/var` folder
     ```bash
-    $ docker-compose exec app chown -R www-data:1000 var
+    docker-compose exec app chown -R www-data:1000 var
     ```
     then
     ```bash
-    $ docker-compose exec -u www-data app composer install
+    docker-compose exec -u www-data app composer install
     ```
 
 ## Access the application
@@ -116,12 +116,14 @@ You can access the application both in HTTP and HTTPS:
 In order to get rid of the second compose file (e.g.`docker-compose.mysql.yaml`), [you can validate the configuration](https://docs.docker.com/compose/reference/config/) and then use another Compose file:
 
 ```bash
-$ docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml config > docker-stack.yaml 
+docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml config > docker-stack.yaml
 ```
+
 then
+
 ```bash
-$ docker-compose -f docker-stack.yaml build
-$ docker-compose -f docker-stack.yaml up -d
+docker-compose -f docker-stack.yaml build
+docker-compose -f docker-stack.yaml up -d
 ```
 
 Moreover, you can copy database service configuration from compose file into `docker-compose.yaml` and use it as default.

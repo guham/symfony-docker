@@ -15,18 +15,16 @@ before_install:
   - docker-compose -v
 
 script:
-  - docker-compose -f docker-compose.yaml -f docker-compose.mysql.yaml config > docker-stack.yaml
-  - docker-compose -f docker-stack.yaml build
-  - docker-compose -f docker-stack.yaml up -d
-  - docker-compose -f docker-stack.yaml ps
-  - docker-compose -f docker-stack.yaml stop
-  - docker-compose -f docker-compose.yaml -f docker-compose.postgresql.yaml config > docker-stack.yaml
-  - docker-compose -f docker-stack.yaml build
-  - docker-compose -f docker-stack.yaml up -d
-  - docker-compose -f docker-stack.yaml ps
-  - docker-compose -f docker-stack.yaml stop
-  - docker-compose -f docker-compose.yaml -f docker-compose.mongodb.yaml config > docker-stack.yaml
-  - docker-compose -f docker-stack.yaml build
-  - docker-compose -f docker-stack.yaml up -d
-  - docker-compose -f docker-stack.yaml ps
-  - docker-compose -f docker-stack.yaml stop
+  - make .env
+  - make use-db DB=mysql
+  - make install
+  - make ps
+  - make stop
+  - make use-db DB=postgresql
+  - make install
+  - make ps
+  - make stop
+  - make use-db DB=mongodb
+  - make install
+  - make ps
+  - make stop
