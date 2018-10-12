@@ -1,23 +1,23 @@
-version: '3.2'
+version: '3.4'
 
 services:
   app:
     depends_on:
       - mongodb
+    environment:
+      - MONGODB_URL=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017/${MONGO_INITDB_DATABASE}
+      - MONGODB_DB=${MONGO_INITDB_DATABASE}
 
   mongodb:
     build:
-      context: ./docker/db
-      dockerfile: Dockerfile.mongodb
-      args:
-        - mongodb_username=${MONGODB_USERNAME}
-        - mongodb_password=${MONGODB_PASSWORD}
-        - mongodb_initdb_database=${MONGO_INITDB_DATABASE}
+      context: ./docker/mongodb
     volumes:
-      - ./.data/mongo:/data/db:rw
+      - ./.data/mongo:/data/db:rw,cached
     environment:
-      - MONGO_INITDB_ROOT_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD
-      - MONGO_INITDB_DATABASE
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
     ports:
       - "27017:27017"

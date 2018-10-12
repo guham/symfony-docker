@@ -77,7 +77,6 @@
     ```
     ```bash
     # symfony/.env
-    MONGODB_URL=${MONGODB_SERVER}
     MONGODB_DB=${MONGO_INITDB_DATABASE}
     ```
 

@@ -1,14 +1,15 @@
-version: '3.2'
+version: '3.4'
 
 services:
   app:
     depends_on:
       - mysql
+    environment:
+      - DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
 
   mysql:
     build:
-      context: ./docker/db
-      dockerfile: Dockerfile.mysql
+      context: ./docker/mysql
     volumes:
       - ./.data/mysql:/var/lib/mysql:rw
     environment:

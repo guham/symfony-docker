@@ -3,20 +3,25 @@ DOCKER_COMPOSE  = docker-compose -f docker-stack.yaml
 
 EXEC_PHP        = $(DOCKER_COMPOSE) exec -T app
 EXEC_JS         = $(DOCKER_COMPOSE) exec -T node /entrypoint
+EXEC_MONGODB	= $(DOCKER_COMPOSE) exec mongodb
 
 SYMFONY         = $(EXEC_PHP) bin/console
-COMPOSER        = $(DOCKER_COMPOSE) exec -T -u www-data app composer
+COMPOSER        = $(EXEC_PHP) composer
 YARN            = $(EXEC_JS) yarn
 
 QA				= docker run --rm -v `pwd`:/project mykiwi/phaudit:7.2
-ARTEFACTS		= var/artefacts
+ARTEFACTS		= app/var/artefacts
 
-DEFAULT_DB		= mysql
+DEFAULT_DB		= postgresql
 DB				?= ${DEFAULT_DB}
 
 MYSQL			= $(shell echo $$(grep -s 'mysql' docker-stack.yaml))
 POSTGRESQL		= $(shell echo $$(grep -s 'postgresql' docker-stack.yaml))
 MONGODB			= $(shell echo $$(grep -s 'mongodb' docker-stack.yaml))
+
+MONGODB_USER	= $(shell echo $$(grep MONGODB_USERNAME .env | xargs) | sed 's/.*=//')
+MONGODB_NAME	= $(shell echo $$(grep MONGO_INITDB_DATABASE .env | xargs) | sed 's/.*=//')
+MONGODB_PWD		= $(shell echo $$(grep MONGODB_PASSWORD .env | xargs) | sed 's/.*=//')
 
 ifneq ($(MYSQL),)
     CURRENTLY_USED_DB = mysql
@@ -64,7 +69,7 @@ reset: ## Stop and start a fresh install of the project
 reset: kill install
 
 start: ## Start the project
-	$(DOCKER_COMPOSE) up -d --remove-orphans --no-recreate
+	$(DOCKER_COMPOSE) up -d --remove-orphans
 
 logs: ## Show all logs
 	$(DOCKER_COMPOSE) logs -f
@@ -74,7 +79,7 @@ stop: ## Stop the project
 
 clean: ## Stop the project and remove generated files
 clean: kill
-	rm -rf .env vendor node_modules
+	rm -rf .env app/.env app/vendor app/node_modules
 
 ps:	## List containers
 	$(DOCKER) ps
@@ -119,6 +124,9 @@ watch: node_modules
 fix-perms: ## Fix permissions
 	@$(EXEC_PHP) chown -R www-data:1000 var
 
+terminal-mongodb: ## MongoDB terminal
+	$(EXEC_MONGODB) mongo $(MONGODB_NAME) -u $(MONGODB_USER) -p $(MONGODB_PWD)
+
 .PHONY: db migration update assets watch fix-perms
 
 ##
@@ -140,13 +148,13 @@ tf: vendor
 .PHONY: tests tu tf
 
 # rules based on files
-composer.lock: composer.json
+composer.lock: app/composer.json
 	$(COMPOSER) update --lock --no-scripts --no-interaction
 
-vendor: fix-perms composer.lock
+vendor: composer.lock
 	$(COMPOSER) install
 
-node_modules: package.json yarn.lock
+node_modules: app/package.json app/yarn.lock
 	$(YARN) install
 	@touch -c node_modules
 
@@ -157,8 +165,8 @@ node_modules: package.json yarn.lock
 		touch .env;\
 		exit 1;\
 	else\
-		echo cp .env.dist .env;\
 		cp .env.dist .env;\
+		cp app/.env.dist app/.env;\
 	fi
 
 ##
@@ -224,10 +232,8 @@ help: info
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 .PHONY: help
 
-#RUN_APP = $(DCS) exec -u www-data app
-#
 
-#
+
 #mysql:	## MySQL terminal
 #		$(DCS) exec mysql mysql -usymfony -psymfony
 #.PHONY: mysql
@@ -236,6 +242,3 @@ help: info
 #		$(DCS) exec postgresql psql -d symfony -U symfony
 #.PHONY: postgresql
 #
-#mongodb:	## MongoDB terminal
-#		$(DCS) exec mongodb mongo -u symfony -p symfony --authenticationDatabase symfony
-#.PHONY: mongodb

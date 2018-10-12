@@ -1,14 +1,14 @@
-version: '3.2'
+version: '3.4'
 
 services:
   app:
     depends_on:
       - postgresql
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
 
   postgresql:
-    build:
-      context: ./docker/db
-      dockerfile: Dockerfile.postgresql
+    image: postgres:10-alpine
     volumes:
       - ./.data/postgresql:/var/lib/postgresql/data:rw
     environment:
