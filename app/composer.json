@@ -19,6 +19,7 @@
         "symfony/orm-pack": "^1.0",
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
+        "symfony/webpack-encore-pack": "^1.0",
         "symfony/yaml": "*"
     },
     "require-dev": {
@@ -28,8 +29,7 @@
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "^1.7",
         "symfony/phpunit-bridge": "^4.0",
-        "symfony/profiler-pack": "^1.0",
-        "symfony/webpack-encore-pack": "^1.0"
+        "symfony/profiler-pack": "^1.0"
     },
     "config": {
         "preferred-install": {
