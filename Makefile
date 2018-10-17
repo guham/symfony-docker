@@ -58,12 +58,12 @@ build:
 	@$(DOCKER_COMPOSE) pull --parallel --quiet --ignore-pull-failures 2> /dev/null
 	$(DOCKER_COMPOSE) build --pull
 
-kill:
+kill: clean-app
 	$(DOCKER_COMPOSE) kill
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 install: ## Install and start the project
-install: .env build start assets db
+install: .env use-db build start assets db
 
 reset: ## Stop and start a fresh install of the project
 reset: kill install
@@ -79,12 +79,15 @@ stop: ## Stop the project
 
 clean: ## Stop the project and remove generated files
 clean: kill
-	rm -rf .env app/.env app/vendor app/node_modules
+	rm -rf .env app/.env
 
 ps:	## List containers
 	$(DOCKER) ps
 
 .PHONY: use-db build kill install reset start stop clean ps logs
+
+clean-app: ## Remove generated files
+	$(EXEC_PHP) rm -rf vendor node_modules public/build
 
 ##
 ## Utils
@@ -121,13 +124,14 @@ watch: ## Run Webpack Encore in watch mode
 watch: node_modules
 	$(YARN) run watch
 
-fix-perms: ## Fix permissions
-	@$(EXEC_PHP) chown -R www-data:1000 var
+production: ## Create a production build
+production: node_modules
+	$(YARN) run build
 
 terminal-mongodb: ## MongoDB terminal
 	$(EXEC_MONGODB) mongo $(MONGODB_NAME) -u $(MONGODB_USER) -p $(MONGODB_PWD)
 
-.PHONY: db migration update assets watch fix-perms
+.PHONY: db migration update assets watch production
 
 ##
 ## Tests
