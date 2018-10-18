@@ -10,8 +10,6 @@ services:
       - app_log:/srv/var/log
     environment:
       - REDIS_URL
-    # env_file:
-    #   - ./.env
 
   nginx:
     build:

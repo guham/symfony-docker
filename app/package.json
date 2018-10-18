@@ -1,6 +1,10 @@
 {
     "devDependencies": {
         "@symfony/webpack-encore": "^0.20.0",
+        "eslint": "^5.7.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-loader": "^2.1.1",
+        "eslint-plugin-import": "^2.14.0",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
@@ -9,6 +13,10 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production"
+        "build": "encore production",
+        "lint": "eslint --fix --color -f codeframe assets/js/"
+    },
+    "dependencies": {
+        "babel-polyfill": "^6.26.0"
     }
 }

@@ -189,10 +189,10 @@ ly: vendor
 
 security: ## Check security of your dependencies (https://security.symfony.com/)
 security: vendor
-	$(EXEC_PHP) ./vendor/bin/security-checker security:check
+	$(SYMFONY) security:check
 
 phploc: ## PHPLoc (https://github.com/sebastianbergmann/phploc)
-	$(QA) phploc src/
+	$(QA) phploc app/src/
 
 pdepend: ## PHP_Depend (https://pdepend.org)
 pdepend: artefacts
@@ -200,49 +200,38 @@ pdepend: artefacts
 		--summary-xml=$(ARTEFACTS)/pdepend_summary.xml \
 		--jdepend-chart=$(ARTEFACTS)/pdepend_jdepend.svg \
 		--overview-pyramid=$(ARTEFACTS)/pdepend_pyramid.svg \
-		src/
+		app/src/
 
 phpcpd: ## PHP Copy/Paste Detector (https://github.com/sebastianbergmann/phpcpd)
-	$(QA) phpcpd src
+	$(QA) phpcpd app/src
 
 phpdcd: ## PHP Dead Code Detector (https://github.com/sebastianbergmann/phpdcd)
-	$(QA) phpdcd src
+	$(QA) phpdcd app/src
 
 phpmetrics: ## PhpMetrics (http://www.phpmetrics.org)
 phpmetrics: artefacts
-	$(QA) phpmetrics --report-html=$(ARTEFACTS)/phpmetrics src
+	$(QA) phpmetrics --report-html=$(ARTEFACTS)/phpmetrics app/src
 
 php-cs-fixer: ## php-cs-fixer (http://cs.sensiolabs.org)
-	$(QA) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff
+	$(QA) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff app/src
 
 apply-php-cs-fixer: ## apply php-cs-fixer fixes
-	$(QA) php-cs-fixer fix --using-cache=no --verbose --diff
+	$(QA) php-cs-fixer fix --using-cache=no --verbose --diff app/src
 
 twigcs: ## twigcs (https://github.com/allocine/twigcs)
-	$(QA) twigcs lint templates
+	$(QA) twigcs lint app/templates
 
 eslint: ## eslint (https://eslint.org/)
 eslint: node_modules
-	$(EXEC_JS) node_modules/.bin/eslint --fix-dry-run assets/js/**
+	$(YARN) run lint
 
 artefacts:
 	mkdir -p $(ARTEFACTS)
 
-.PHONY: lint lt ly phploc pdepend phpmd php_codesnifer phpcpd phpdcd phpmetrics php-cs-fixer apply-php-cs-fixer artefacts
+.PHONY: lint lt ly phploc pdepend phpmd php_codesnifer phpcpd phpdcd phpmetrics php-cs-fixer apply-php-cs-fixer
 
 .DEFAULT_GOAL := help
 help: info
 	@printf "\n"
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 .PHONY: help
-
-
-
-#mysql:	## MySQL terminal
-#		$(DCS) exec mysql mysql -usymfony -psymfony
-#.PHONY: mysql
-#
-#postgresql:	## PostgreSQL terminal
-#		$(DCS) exec postgresql psql -d symfony -U symfony
-#.PHONY: postgresql
-#

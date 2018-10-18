@@ -18,18 +18,16 @@
         "symfony/monolog-bundle": "^3.3",
         "symfony/orm-pack": "^1.0",
         "symfony/twig-bundle": "*",
-        "symfony/validator": "*",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/yaml": "*"
     },
     "require-dev": {
         "sensiolabs/security-checker": "^5.0",
-        "symfony/debug-bundle": "^4.0",
-        "symfony/debug-pack": "^1.0",
+        "symfony/debug-pack": "*",
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "^1.7",
-        "symfony/phpunit-bridge": "^4.0",
-        "symfony/profiler-pack": "^1.0"
+        "symfony/profiler-pack": "*",
+        "symfony/test-pack": "^1.0"
     },
     "config": {
         "preferred-install": {
